@@ -8,8 +8,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using test_task.Models.Context;
+using test_task.Services;
 
 namespace test_task;
 
@@ -27,6 +29,7 @@ public class Startup
             
             services.AddDbContext<Context>(options => options.UseSqlServer(connection));
             services.AddControllersWithViews();
+            services.AddTransient<IClientService, ClientService>();
         }
  
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

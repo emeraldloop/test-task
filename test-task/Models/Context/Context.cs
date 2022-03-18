@@ -13,9 +13,8 @@ public class Context : DbContext
     {
         Database.EnsureCreated();
     } 
-    /*   protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        optionsBuilder.UseSqlServer(@"Server=LAPTOP-HSG27GVC;Database=test-task-db;Trusted_Connection=True;");
+        modelBuilder.Entity<Сonstitutor>().HasKey(c=> new {c.ClientInn, c.FullName});
     }
-    */
 }

@@ -1,8 +1,32 @@
-﻿@{
+﻿@model List<test_task.Models.Client>
+@{
     ViewData["Title"] = "Home Page";
 }
+<!DOCTYPE html>
+ 
+<html>
+<head>
+    <title>Тестовое задание</title>
+</head>
+<body>
+<h3>Клиенты</h3>
+<table>
+    <tr>
+        <td>ИНН</td>
+        <td>Имя</td>
+        <td>Тип</td>
+        <td>Дата добавления</td>
+        <td>Дата обновления</td>
+        <td></td>
+    </tr>
+    @foreach (var client in Model)
+    {
+        <tr>
+            <td>@client.Inn.ToString()</td>
+            <td>@client.Name</td>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+        </tr>
+    }
+</table>
+</body>
+</html>
