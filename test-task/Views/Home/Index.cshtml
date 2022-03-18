@@ -24,9 +24,12 @@
         <tr>
             <td>@client.Inn.ToString()</td>
             <td>@client.Name</td>
-
+            <td>---</td>
+            <td>@client.DateAdding.ToString()</td>
+            <td>@client.DateUpdating.ToString()</td>
         </tr>
     }
 </table>
+<a asp-controller="Home" asp-action="AddClient">Добавить клиента</a>
 </body>
 </html>

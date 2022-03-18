@@ -1,18 +1,23 @@
-
-
-@{
-    Layout = null;
-}
-
-<!DOCTYPE html>
-
-<html>
-<head>
-    <title>Success</title>
-</head>
-<body>
-<div>
-      
-</div>
-</body>
-</html>
+@model test_task.Models.Client
+ 
+<h2>Добавление пользователя</h2>
+ 
+<form asp-action="AddClient" asp-controller="Home"  asp-antiforgery="true">
+    <div>
+        <div>
+            <label asp-for="Inn">ИНН</label>
+            <input type="number" asp-for="Inn" />
+        </div>
+        <div>
+            <label asp-for="Name">Имя</label>
+            <input type="text" asp-for="Name" />
+        </div>
+        <div>
+            <label asp-for="BusinessTypeId">Тип</label>
+            <select asp-for="BusinessTypeId" asp-items="ViewBag.Types"></select>
+        </div>    
+        <div>
+            <input type="submit" value="Save" />
+        </div>
+    </div>
+</form>

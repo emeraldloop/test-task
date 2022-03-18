@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using test_task.Models;
 using test_task.Models.Context;
 using test_task.Services;
@@ -22,14 +24,23 @@ public class HomeController : Controller
 
     public async Task<IActionResult> Index()
     {
+        ViewBag.Types = _ctx.BusinessType.ToList();
         return View( await _clientService.GetAllClients());
     }
-
-    public async Task<IActionResult> AddClient(long Inn, string name, int type)
+    
+    [HttpGet]
+    public async Task<IActionResult> AddClient()
     {
-        Client client = new Client(Inn,name,type);
-        await _clientService.AddClient(client);
         return View();
     }
+    
+    [HttpPost]
+    public async Task<IActionResult> AddClient(long Inn, string Name, int TypeId)
+    {
+        Client client = new Client(Inn,Name,TypeId);
+        await _clientService.AddClient(client);
+        return Redirect("~/Home/Index");
+    }
 
+    
 }
