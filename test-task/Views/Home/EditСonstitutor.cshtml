@@ -1,0 +1,17 @@
+@model test_task.Models.Сonstitutor
+
+<h2>Изменение учредителя</h2>
+
+<form asp-action="EditСonstitutor" asp-controller="Home"  asp-antiforgery="true">
+    <div>
+        @Html.HiddenFor(m=> m.Inn)
+        @Html.HiddenFor(m=> m.ClientInn)
+        <div>
+            <label asp-for="FullName">ФИО</label>
+            <input type="text" asp-for="FullName"/>
+        </div>
+        <div>
+            <input type="submit" value="Save"/>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,57 @@
+@model test_task.Models.Client
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Клиент</title>
+</head>
+<body>
+<h1>Информация о клиенте</h1>
+<table>
+    <tr>
+        <td>ИНН</td>
+        <td>Имя</td>
+        <td>Тип</td>
+        <td>Дата добавления</td>
+        <td>Дата обновления</td>
+    </tr>
+    <tr>
+        <td>@Model.Inn.ToString()</td>
+        <td>@Model.Name</td>
+        <td>@Model.GetTypeName()</td>
+        <td>@Model.DateAdding.ToString()</td>
+        <td>@Model.DateUpdating.ToString()</td>
+        <td> <a asp-controller="Home" asp-action="EditClient" asp-route-Inn=@Model.Inn>Редактировать</a> </td>
+        <td> <a asp-controller="Home" asp-action="DeleteClient" asp-route-clientInn="@Model.Inn">Удалить</a> </td>
+    </tr>
+</table>
+<h2>Список учредителей</h2>
+    <table>
+        <tr>
+            <td>ИНН</td>
+            <td>ФИО</td>
+            <td>Дата добавления</td>
+            <td>Дата обновления</td>
+        </tr>
+        @foreach (var constitutor in Model.Сonstitutors)
+        {
+            var dateAdd = DateTimeOffset.FromUnixTimeSeconds(Convert.ToInt64(constitutor.DateAdding)).ToLocalTime();
+            var dateUpdate = DateTimeOffset.FromUnixTimeSeconds(Convert.ToInt64(constitutor.DateAdding)).ToLocalTime();
+            <tr>
+                <td>@constitutor.Inn</td>
+                <td>@constitutor.FullName</td>
+                <td>@dateAdd.ToString("d")</td>
+                <td>@dateUpdate.ToString("d")</td>
+                <td> <a asp-controller="Home" asp-action="EditСonstitutor" asp-route-Inn="@constitutor.Inn">Редактировать</a> </td>
+                <td> <a asp-controller="Home" asp-action="DeleteСonstitutor" asp-route-clientInn="@Model.Inn" asp-route-constitutorInn="@constitutor.Inn">Удалить</a> </td>
+            </tr>
+        }
+    </table>
+    <a asp-controller="Home" asp-action="AddConstitutor" asp-route-clientInn=@Model.Inn>Добавить учредителя</a>
+</body>
+</html>

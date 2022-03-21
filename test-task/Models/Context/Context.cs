@@ -17,7 +17,7 @@ public class Context : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<BusinessType>().HasData(
-            new BusinessType[] 
+            new BusinessType[]
             {
                 new BusinessType { Id=0, Name="ЮЛ"},
                 new BusinessType { Id=1, Name="ИП"}

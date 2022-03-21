@@ -1,0 +1,20 @@
+@model test_task.Models.Client
+
+<h2>Изменение пользователя</h2>
+
+<form asp-action="EditClient" asp-controller="Home"  asp-antiforgery="true">
+    <div>
+        @Html.HiddenFor(m=> m.Inn)
+        <div>
+            <label asp-for="Name">Имя</label>
+            <input type="text" asp-for="Name"/>
+        </div>
+        <div>
+            <label asp-for="BusinessTypeId">Тип</label>
+            <select asp-for="BusinessTypeId" asp-items="ViewBag.Types"></select>
+        </div>
+        <div>
+            <input type="submit" value="Save"/>
+        </div>
+    </div>
+</form>

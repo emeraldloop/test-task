@@ -1,4 +1,5 @@
-﻿@model List<test_task.Models.Client>
+﻿@using System.Globalization
+@model List<test_task.Models.Client>
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -17,19 +18,22 @@
         <td>Тип</td>
         <td>Дата добавления</td>
         <td>Дата обновления</td>
-        <td></td>
     </tr>
     @foreach (var client in Model)
     {
+        var dateAdd = DateTimeOffset.FromUnixTimeSeconds(Convert.ToInt64(client.DateAdding)).ToLocalTime();
+        var dateUpdate = DateTimeOffset.FromUnixTimeSeconds(Convert.ToInt64(client.DateAdding)).ToLocalTime();
         <tr>
+            
             <td>@client.Inn.ToString()</td>
-            <td>@client.Name</td>
-            <td>---</td>
-            <td>@client.DateAdding.ToString()</td>
-            <td>@client.DateUpdating.ToString()</td>
+            <td><a asp-controller="Home" asp-action="ShowClient" asp-route-clientInn=@client.Inn>@client.Name</a></td>
+            <td>@client.GetTypeName()</td>
+            <td>@dateAdd.ToString("g")</td>
+            <td>@dateUpdate.ToString("g")</td>
         </tr>
     }
 </table>
 <a asp-controller="Home" asp-action="AddClient">Добавить клиента</a>
+
 </body>
 </html>

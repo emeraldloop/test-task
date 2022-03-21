@@ -12,21 +12,27 @@ public class Client
     public int BusinessTypeId { get; set; }
     public double DateAdding { get; set; }
     public double DateUpdating { get; set; }
-    public List<Сonstitutor> Сonstitutors { get; set; }
+    public List<Сonstitutor> Сonstitutors { get; set; } = new List<Сonstitutor>();
     public BusinessType BusinessType { get; set; }
     
 
     public Client()
     {
-        DateAdding = DateTimeOffset.Now.ToUnixTimeSeconds();
-        DateUpdating = DateTimeOffset.Now.ToUnixTimeSeconds();
+        
+        
     }
     public Client(long inn, string name, int type)
     {
         Inn = inn;
         Name = name;
         BusinessTypeId = type;
-        DateAdding = DateTimeOffset.Now.ToUnixTimeSeconds();
-        DateUpdating = DateTimeOffset.Now.ToUnixTimeSeconds();
+        DateAdding = DateTimeOffset.Now.ToLocalTime().ToUnixTimeSeconds();
+        DateUpdating = DateTimeOffset.Now.ToLocalTime().ToUnixTimeSeconds();
     }
+    public string GetTypeName()
+    {
+        if (BusinessTypeId != 0 && BusinessTypeId != 1 ) return "error";
+        return (BusinessTypeId == 0) ? "ЮЛ" : "ИП";
+    }
+
 }

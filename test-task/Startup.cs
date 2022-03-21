@@ -29,6 +29,7 @@ public class Startup
             
             services.AddDbContext<Context>(options => options.UseSqlServer(connection));
             services.AddControllersWithViews();
+            services.AddTransient<IСonstitutorService, СonstitutorService>();
             services.AddTransient<IClientService, ClientService>();
         }
  
