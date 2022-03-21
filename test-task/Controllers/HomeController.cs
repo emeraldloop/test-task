@@ -24,12 +24,73 @@ public class HomeController : Controller
         _constitutorService = constitutorService;
     }
 
+    /* 
     public async Task<IActionResult> Index()
     {
-        //ViewBag.Types = _ctx.BusinessType.ToList();
         return View( await _clientService.GetAllClients());
     }
-
+    */
+    
+    public async Task<IActionResult> Index(int? businessType, string name, int page = 1, 
+        SortState sortOrder = SortState.NameAsc)
+    {
+        int pageSize = 3;
+ 
+        //фильтрация
+        IQueryable<Client> clients = _ctx.Clients;
+        if (businessType != null && businessType != 2)
+        { 
+            clients = clients.Where(p => p.BusinessTypeId == businessType);
+        }
+        if (!String.IsNullOrEmpty(name))
+        {
+            clients = clients.Where(p => p.Name.Contains(name));
+        }
+ 
+        // сортировка
+        switch (sortOrder)
+        {
+            case SortState.NameDesc:
+                clients = clients.OrderByDescending(s => s.Name);
+                break;
+            case SortState.DateAddAsc:
+                clients=clients.OrderBy(s => s.DateAdding);
+                break;
+            case SortState.DateAddDesc:
+                clients = clients.OrderByDescending(s => s.DateAdding);
+                break;
+            case SortState.DateUpdateAsc:
+                clients = clients.OrderBy(s => s.DateUpdating);
+                break;
+            case SortState.DateUpdateDesc:
+                clients = clients.OrderByDescending(s => s.DateUpdating);
+                break;
+            case SortState.BusinessTypeAsc:
+                clients=clients.OrderBy(s => s.GetTypeName());
+                break;
+            case SortState.BusinessTypeDesc:
+                clients=clients.OrderByDescending(s => s.GetTypeName());
+                break;
+            default:
+                clients = clients.OrderBy(s => s.Name);
+                break;
+        }
+ 
+        // пагинация
+        var count = await clients.CountAsync();
+        var items = await clients.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+ 
+        // формируем модель представления
+        IndexViewModel viewModel = new IndexViewModel 
+        {
+            PageViewModel = new PageViewModel(count, page, pageSize),
+            SortViewModel = new SortViewModel(sortOrder),
+            FilterViewModel = new FilterViewModel(_ctx.BusinessType.ToList(), businessType, name), 
+            Clients = items
+        };
+        return View(viewModel);
+    }    
+    
     public async Task<IActionResult> ShowClient(long clientInn)
     {
         Client client = _ctx.Clients.FirstOrDefault(c => c.Inn.Equals(clientInn));
