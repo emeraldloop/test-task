@@ -40,7 +40,7 @@ public class HomeController : Controller
         IQueryable<Client> clients = _ctx.Clients;
         if (businessType != null && businessType != 2)
         { 
-            clients = clients.Where(p => p.BusinessTypeId == businessType);
+            clients = clients.Where(p => (int)p.BusinessType == businessType);
         }
         if (!String.IsNullOrEmpty(name))
         {
@@ -66,10 +66,10 @@ public class HomeController : Controller
                 clients = clients.OrderByDescending(s => s.DateUpdating);
                 break;
             case SortState.BusinessTypeAsc:
-                clients=clients.OrderBy(s => s.GetTypeName());
+                clients=clients.OrderBy(s => s.BusinessType);
                 break;
             case SortState.BusinessTypeDesc:
-                clients=clients.OrderByDescending(s => s.GetTypeName());
+                clients=clients.OrderByDescending(s => s.BusinessType);
                 break;
             default:
                 clients = clients.OrderBy(s => s.Name);
@@ -80,12 +80,14 @@ public class HomeController : Controller
         var count = await clients.CountAsync();
         var items = await clients.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
  
+
+        
         // формируем модель представления
         IndexViewModel viewModel = new IndexViewModel 
         {
             PageViewModel = new PageViewModel(count, page, pageSize),
             SortViewModel = new SortViewModel(sortOrder),
-            FilterViewModel = new FilterViewModel(_ctx.BusinessType.ToList(), businessType, name), 
+            FilterViewModel = new FilterViewModel(businessType, name), 
             Clients = items
         };
         return View(viewModel);
@@ -101,47 +103,68 @@ public class HomeController : Controller
     [HttpGet]
     public async Task<IActionResult> AddClient()
     {
-        ViewBag.Types =new SelectList(_ctx.BusinessType.ToList(), "Id", "Name");
         return View();
     }
     
     [HttpPost]
-    public async Task<IActionResult> AddClient(long Inn, string Name, int TypeId)
+    public async Task<IActionResult> AddClient(Client client)
     {
-        Client client = new Client(Inn,Name,TypeId);
-        await _clientService.AddClient(client);
-        return Redirect("~/Home/Index");
+        try
+        {
+            if (ModelState.IsValid)
+            {
+                await _clientService.AddClient(client);
+                return Redirect("~/Home/Index");
+            }
+            else return View(client);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning("An error while execute client adding request, reason: {0}",ex.Message);
+            return Redirect($"~/Home/Error/?message={ex.Message}");
+        }
     }
     
     [HttpGet]
     public async Task<IActionResult> EditClient(long Inn)
     {
-        ViewBag.Types =new SelectList(_ctx.BusinessType.ToList(), "Id", "Name");
         var clientToUpdate = _ctx.Clients.FirstOrDefault(cl => cl.Inn.Equals(Inn));
         return View(clientToUpdate);
     }
     
     [HttpPost]
-    public async Task<IActionResult> EditClient(long Inn, string Name, int TypeId)
+    public async Task<IActionResult> EditClient(Client client)
     {
-        Client updatedClient = new Client(Inn, Name, TypeId);
-        await _clientService.EditClient(updatedClient);
+        await _clientService.EditClient(client);
         return Redirect("~/Home/Index");
     }
     
     [HttpGet]
-    public async Task<IActionResult> AddConstitutor(long clientInn)
+    public async Task<IActionResult> AddСonstitutor(long clientInn)
     {
         ViewData["clientInn"] = clientInn;
         return View();
     }
     
     [HttpPost]
-    public async Task<IActionResult> AddConstitutor(long Inn,long clientInn, string fullName )
+    public async Task<IActionResult> AddСonstitutor(Сonstitutor constitutor)
     {
-        Сonstitutor constitutor = new Сonstitutor(Inn,clientInn,fullName);
-        await _constitutorService.AddСonstitutor(constitutor);
-        return Redirect($"~/Home/ShowClient/?clientInn={clientInn}");
+        try
+        {
+            var client = _ctx.Clients.FirstOrDefault(cl => cl.Inn.Equals(constitutor.ClientInn));
+            if (ModelState.IsValid && client.BusinessType != 1)
+            {
+                await _constitutorService.AddСonstitutor(constitutor);
+                return Redirect($"~/Home/ShowClient/?clientInn={constitutor.ClientInn}");
+            }
+            else return View(constitutor);
+        }
+        catch(Exception ex)
+        {
+            _logger.LogWarning("An error while execute client adding request, reason: {0}",ex.Message);
+            return Redirect($"~/Home/Error/?message={ex.Message}");
+        }
+        
     }
     
     public async Task<IActionResult> DeleteClient(long clientInn)
@@ -164,10 +187,15 @@ public class HomeController : Controller
     }
     
     [HttpPost]
-    public async Task<IActionResult> EditСonstitutor(long Inn,long clientInn,string fullName)
+    public async Task<IActionResult> EditСonstitutor(Сonstitutor сonstitutor)
     {
-        var constitutor = new Сonstitutor(Inn, clientInn, fullName);
-        await _constitutorService.EditСonstitutor(constitutor);
-        return Redirect($"~/Home/ShowClient/?clientInn={clientInn}");
+        await _constitutorService.EditСonstitutor(сonstitutor);
+        return Redirect($"~/Home/ShowClient/?clientInn={сonstitutor.ClientInn}");
+    }
+
+    public async Task<IActionResult> Error(string message)
+    {
+        ViewData["message"] = message;
+        return View();
     }
 }

@@ -20,10 +20,9 @@ public class СonstitutorService : IСonstitutorService
         client.DateUpdating = DateTimeOffset.Now.ToUnixTimeSeconds();
         client.Сonstitutors.Add(cons);
         cons.Client = client;
-        
-        _context.Сonstitutors.Add(cons);
         try
         {
+            _context.Сonstitutors.Add(cons);
             _context.Clients.Update(client);
             await _context.SaveChangesAsync();
             return constitutor;

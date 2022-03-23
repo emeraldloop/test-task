@@ -1,23 +1,30 @@
 @model test_task.Models.Client
  
-<h2>Добавление пользователя</h2>
+<head>
+    <title>Добавление клиента</title>
+</head>
+
+<h2>Добавление клиента</h2>
  
 <form asp-action="AddClient" asp-controller="Home"  asp-antiforgery="true">
     <div>
+        <div class="validation" asp-validation-summary="ModelOnly"></div>
         <div>
             <label asp-for="Inn">ИНН</label>
-            <input type="number" asp-for="Inn" />
+            <input type="number" asp-for="Inn"/>
+            <span asp-validation-for="Inn"></span>
         </div>
         <div>
             <label asp-for="Name">Имя</label>
-            <input type="text" asp-for="Name" />
+            <input type="text" asp-for="Name"/>
+            <span asp-validation-for="Name"></span>
         </div>
         <div>
-            <label asp-for="BusinessTypeId">Тип</label>
-            <select asp-for="BusinessTypeId" asp-items="ViewBag.Types"></select>
-        </div>    
+            <label asp-for="BusinessType">Тип</label>
+            <select name="BusinessType" asp-items="Html.GetEnumSelectList<ClientType>()"></select>
+        </div>
         <div>
-            <input type="submit" value="Save" />
+            <input type="submit" value="Save"/>
         </div>
     </div>
 </form>

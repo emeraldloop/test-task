@@ -1,8 +1,5 @@
 @model test_task.Models.Client
 
-@{
-    Layout = null;
-}
 
 <!DOCTYPE html>
 
@@ -12,7 +9,7 @@
 </head>
 <body>
 <h1>Информация о клиенте</h1>
-<table>
+<table class="table">
     <tr>
         <td>ИНН</td>
         <td>Имя</td>
@@ -24,14 +21,16 @@
         <td>@Model.Inn.ToString()</td>
         <td>@Model.Name</td>
         <td>@Model.GetTypeName()</td>
-        <td>@Model.DateAdding.ToString()</td>
-        <td>@Model.DateUpdating.ToString()</td>
-        <td> <a asp-controller="Home" asp-action="EditClient" asp-route-Inn=@Model.Inn>Редактировать</a> </td>
-        <td> <a asp-controller="Home" asp-action="DeleteClient" asp-route-clientInn="@Model.Inn">Удалить</a> </td>
+        <td>@DateTimeOffset.FromUnixTimeSeconds(Convert.ToInt64(Model.DateAdding)).ToLocalTime().ToString("g")</td>
+        <td>@DateTimeOffset.FromUnixTimeSeconds(Convert.ToInt64(Model.DateUpdating)).ToLocalTime().ToString("g")</td>
+        <td align="right"> <a asp-controller="Home" asp-action="EditClient" class="btn btn-outline-info" asp-route-Inn=@Model.Inn>Редактировать</a> </td>
+        <td align="right"> <a asp-controller="Home" asp-action="DeleteClient" class="btn btn-outline-danger" asp-route-clientInn="@Model.Inn">Удалить</a> </td>
     </tr>
 </table>
-<h2>Список учредителей</h2>
-    <table>
+@if (Model.BusinessType == 0)
+{
+    <h2>Список учредителей</h2>
+    <table class="table" >
         <tr>
             <td>ИНН</td>
             <td>ФИО</td>
@@ -45,13 +44,14 @@
             <tr>
                 <td>@constitutor.Inn</td>
                 <td>@constitutor.FullName</td>
-                <td>@dateAdd.ToString("d")</td>
-                <td>@dateUpdate.ToString("d")</td>
-                <td> <a asp-controller="Home" asp-action="EditСonstitutor" asp-route-Inn="@constitutor.Inn">Редактировать</a> </td>
-                <td> <a asp-controller="Home" asp-action="DeleteСonstitutor" asp-route-clientInn="@Model.Inn" asp-route-constitutorInn="@constitutor.Inn">Удалить</a> </td>
+                <td class="floating-th">@dateAdd.ToString("g")</td>
+                <td class="floating-th">@dateUpdate.ToString("g")</td>
+                <td align="right"> <a asp-controller="Home" asp-action="EditСonstitutor"class="btn btn-outline-info" style = "" asp-route-Inn="@constitutor.Inn">Редактировать</a> </td>
+                <td align="right"> <a asp-controller="Home" asp-action="DeleteСonstitutor" class="btn btn-outline-danger" asp-route-clientInn="@Model.Inn" asp-route-constitutorInn="@constitutor.Inn">Удалить</a> </td>
             </tr>
         }
     </table>
-    <a asp-controller="Home" asp-action="AddConstitutor" asp-route-clientInn=@Model.Inn>Добавить учредителя</a>
+    <a asp-controller="Home" asp-action="AddСonstitutor" class="btn btn-outline-primary" asp-route-clientInn=@Model.Inn>Добавить учредителя</a>
+}
 </body>
 </html>
