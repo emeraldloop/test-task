@@ -7,16 +7,16 @@
 <form asp-action="EditClient" asp-controller="Home"  asp-antiforgery="true">
     <div>
         @Html.HiddenFor(m=> m.Inn)
-        <div>
+        <div style="margin-top: 20px">
             <label asp-for="Name">Имя</label>
             <input type="text" asp-for="Name"/>
         </div>
-        <div>
+        <div style="margin-top: 20px">
             <label asp-for="BusinessType">Тип</label>
             <select asp-for="BusinessType" asp-items="Html.GetEnumSelectList<ClientType>()"></select>
         </div>
-        <div>
-            <input type="submit" value="Save"/>
+        <div style="margin-top: 20px">
+             <input type="submit" class="btn btn-outline-dark" value="Save"/>
         </div>
     </div>
 </form>

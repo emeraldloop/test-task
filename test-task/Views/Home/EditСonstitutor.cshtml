@@ -6,12 +6,12 @@
     <div>
         @Html.HiddenFor(m=> m.Inn)
         @Html.HiddenFor(m=> m.ClientInn)
-        <div>
+        <div style="margin-top: 20px">
             <label asp-for="FullName">ФИО</label>
             <input type="text" asp-for="FullName"/>
         </div>
-        <div>
-            <input type="submit" value="Save"/>
+        <div style="margin-top: 20px">
+             <input type="submit" class="btn btn-outline-dark" value="Save"/>
         </div>
     </div>
 </form>

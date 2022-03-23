@@ -9,20 +9,20 @@
 <form asp-action="AddСonstitutor" asp-controller="Home"  asp-antiforgery="true">
     <div>
          <div class="validation" asp-validation-summary="ModelOnly"></div>
-        <div>
+        <div style="margin-top: 20px">
             <label asp-for="Inn">ИНН</label>
             <input type="number" asp-for="Inn"/>
             <span asp-validation-for="Inn"></span>
         </div>
-        <div>
+        <div style="margin-top: 20px">
             <label asp-for="FullName">Имя</label>
             <input type="text" asp-for="FullName"/>
             <span asp-validation-for="FullName"></span>
         </div>
         <input type="hidden" value="@ViewData["clientInn"]" name="ClientInn"/>
 
-        <div>
-            <input type="submit" value="Save"/>
+        <div style="margin-top: 20px">
+            <input type="submit" class="btn btn-outline-dark" value="Save"/>
         </div>
     </div>
 </form>
