@@ -31,5 +31,4 @@ public class Сonstitutor
         DateAdding = DateTimeOffset.Now.ToUnixTimeSeconds();
         DateUpdating = DateTimeOffset.Now.ToUnixTimeSeconds();
     }
-    
 }

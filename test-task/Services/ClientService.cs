@@ -7,6 +7,7 @@ namespace test_task.Services;
 public class ClientService : IClientService
 {
     private readonly Context _context;
+    private readonly ILogger<ClientService> _logger;
     private readonly IСonstitutorService _сonstitutorService;
     public ClientService(Context ctx,IСonstitutorService сonstitutorService)
     {
@@ -24,7 +25,7 @@ public class ClientService : IClientService
         }
         catch (Exception e)
         {
-            Console.WriteLine("Error: when update db context, reason: {0}", e.InnerException.Message);
+            _logger.LogWarning("Error: when update db context, reason: {0}", e.InnerException.Message);
             throw new DbUpdateException();
         }
         
@@ -62,8 +63,7 @@ public class ClientService : IClientService
         }
         catch (Exception e)
         {
-            Console.WriteLine("Error: when update db context, reason: {0}", e.InnerException.Message);
-            
+            _logger.LogWarning("Error: when update db context, reason: {0}", e.InnerException.Message);
             throw new DbUpdateException();
         }
 
@@ -81,6 +81,5 @@ public class ClientService : IClientService
     {
         return await _context.Clients.ToListAsync();
     }
-    
     
 }

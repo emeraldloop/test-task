@@ -23,13 +23,6 @@ public class HomeController : Controller
         _clientService = clientService;
         _constitutorService = constitutorService;
     }
-
-    /* 
-    public async Task<IActionResult> Index()
-    {
-        return View( await _clientService.GetAllClients());
-    }
-    */
     
     public async Task<IActionResult> Index(int? businessType, string name, int page = 1, 
         SortState sortOrder = SortState.NameAsc)
@@ -79,8 +72,6 @@ public class HomeController : Controller
         // пагинация
         var count = await clients.CountAsync();
         var items = await clients.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
- 
-
         
         // формируем модель представления
         IndexViewModel viewModel = new IndexViewModel 

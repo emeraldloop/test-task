@@ -7,7 +7,8 @@ namespace test_task.Services;
 public class СonstitutorService : IСonstitutorService
 {
     private readonly Context _context;
-
+    private readonly ILogger<СonstitutorService> _logger;
+    
     public СonstitutorService(Context ctx)
     {
         _context = ctx;
@@ -29,8 +30,7 @@ public class СonstitutorService : IСonstitutorService
         }
         catch (Exception e)
         {
-            Console.WriteLine("Error: when update db context, reason: {0}", e.InnerException.Message);
-            
+            _logger.LogWarning("Error: when update db context, reason: {0}", e.InnerException.Message);
             throw new DbUpdateException();
         } 
     }
@@ -60,8 +60,7 @@ public class СonstitutorService : IСonstitutorService
         }
         catch (Exception e)
         {
-            Console.WriteLine("Error: when update db context, reason: {0}", e.InnerException.Message);
-            
+            _logger.LogWarning("Error: when update db context, reason: {0}", e.InnerException.Message);
             throw new DbUpdateException();
         }
     }
