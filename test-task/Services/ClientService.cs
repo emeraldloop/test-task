@@ -41,13 +41,11 @@ public class ClientService : IClientService
             entity.Сonstitutors = await _context.Сonstitutors.Where(cos => cos.ClientInn.Equals(client.Inn)).ToListAsync();
             if (entity.BusinessType == 1)
             {
-                List<long> consInn = new List<long>();
-                foreach (var cl in _context.Сonstitutors)
-                {
-                    if (cl.ClientInn == entity.Inn) 
-                        consInn.Add(cl.Inn);
-                }
-                foreach (var Inn in consInn)
+                var selectedInn = (from co in _context.Сonstitutors
+                    where co.ClientInn.Equals(entity.Inn)
+                    select co.Inn).ToList();
+
+                foreach (var Inn in selectedInn)
                 {
                     await _сonstitutorService.DeleteСonstitutor(Inn);
                 }
